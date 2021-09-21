@@ -1,0 +1,146 @@
+/*
+HW 1
+Andy Chu
+gj2743
+9/12/18
+*/
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+	ifstream inFile;	// variables for input and output file
+	ofstream outFile;
+	string userImage;	// The image file of the user
+	string userOutImage; // The Output image of the file
+	string fileHeader;	//holds the header of the ppm file
+	int inFileStuff = 0;	//holds the inital values in the file body
+	int body1, body2, body3;	// the 3 values in the header
+	int choice;	//for the menu
+	int red, green, blue;	//to label the values in the input file
+	int greyScale;	//an options of modification
+	int invertRed, invertBlue, invertGreen, invertAll;
+	int tempHolder = 0;
+
+	cout << "Please type the name of the ppm image file." << endl;	// Ask the sure for the ppm image file.
+	cin >> userImage;	// Recieve the file name
+
+	//opening the user's file
+	inFile.open(userImage);
+
+	//checkinbg if the file is opened correctly 
+	if (!inFile)
+	{
+		cout << "The File Failed to Open!" << endl;
+		cout << "Exiting!" << endl;
+		return 0;
+	}
+
+
+	//take out the file header and the 3 body values
+	inFile >> fileHeader >> body1 >> body2 >> body3;
+	cout << "The file Header is " << fileHeader << endl;
+	cout << setw(22) << body1 << " " << body2 << endl;
+	cout << setw(22) << body3 << endl;
+
+	//ask user to name an output file
+	cout << "Please type the name of your output file." << endl;
+	cin >> userOutImage;
+	outFile.open(userOutImage);	// opening output file
+
+	//menue for the user
+	cout << "Image Processing Choices: " << endl;
+	cout << " 1. Convert to grayscale " << endl;
+	cout << " 2. Invert Red " << endl;
+	cout << " 3. Invert Green " << endl;
+	cout << " 4. Invert Blue " << endl;
+	cout << " 5. Invert All " << endl;
+	cout << " 6. Exit " << endl;
+	//allows the user to choose what action is to be taken
+	cin >> choice;
+
+	//the switch arguments
+	switch (choice)
+	{
+		
+	case 1: cout << endl;
+		//greyscale
+		//adding the ehader back to the file
+		outFile << fileHeader << endl << body1 << " " << body2 << endl << body3 << endl;
+		// do while loop to do arithmatic
+		do {
+			inFile >> inFileStuff;	//takes in the first value
+			tempHolder += inFileStuff;	//makes a tem value to store values from the Input file
+			greyScale = (inFileStuff + tempHolder)/3;	//the arithmatic to do greyscale
+			outFile << greyScale << " ";	//implamenting it to the output file
+		} while (inFile >> inFileStuff);	//iterate throught the file
+		{
+		}
+		break;
+	case 2: cout << endl;
+		//invert red
+		outFile << fileHeader << endl << body1 << " " << body2 << endl << body3 << endl;
+		do {
+			inFile >> red >> green >> blue;
+			invertRed = abs(red - 255);
+			invertGreen = green;
+			invertBlue = blue;
+			//green and blue are not actually inverted those names are just a place holder because no operation have been done
+			outFile << invertRed << invertGreen << invertBlue;
+		} while (inFile >> inFileStuff);
+		{
+		}
+		break;
+	case 3: cout << endl;
+		//invert green
+		outFile << fileHeader << endl << body1 << " " << body2 << endl << body3 << endl;
+		do {
+		inFile >> red >> green >> blue;
+		invertRed = abs(red - 255);
+		invertGreen = green;
+		invertBlue = blue;
+		//green and blue are not actually inverted those names are just a place holder because no operation have been done
+		outFile << invertRed << invertGreen << invertBlue;
+		} while (inFile >> inFileStuff);
+		{
+		}
+		break;
+	case 4: cout << endl;
+		//invert blue
+		outFile << fileHeader << endl << body1 << " " << body2 << endl << body3 << endl;
+		do {
+		inFile >> red >> green >> blue;
+		invertRed = red;
+		invertGreen = green;
+		invertBlue = abs(blue - 255);
+		//green and blue are not actually inverted those names are just a place holder because no operation have been done
+		outFile << invertRed << invertGreen << invertBlue;
+		} while (inFile >> inFileStuff);
+		{
+		}
+		break;
+	case 5: cout << endl;
+		//invertAll
+		outFile << fileHeader << endl << body1 << " " << body2 << endl << body3 << endl;
+		do {
+			inFile >> inFileStuff;
+			invertAll = abs(inFileStuff - 255);
+			outFile << invertAll;
+		} while (inFile >> inFileStuff);
+		{
+		}
+		break;
+	case 6:
+		return 0;
+	}
+
+	//close the files
+	outFile.close();
+	inFile.close();
+}
