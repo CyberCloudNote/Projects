@@ -1,0 +1,437 @@
+#include <iostream>
+#include <math.h>
+#include <iomanip>
+
+using namespace std;
+
+//functions
+void printStock(int n, int d, int q, int o, int f);
+void printMenu();
+void printChange(int nC, int dC,int qC,int oC,int fC);
+double getPurchase();
+
+int main() 
+{
+  //staring stock of dollars and coins
+  int nickel = 25;
+  int dimes = 25;
+  int quarters = 25;
+  int ones = 0;
+  int fives = 0;
+
+  //change counter
+  int nCounter = 0;
+  int dCounter = 0;
+  int qCounter = 0;
+  int oCounter = 0;
+  int fCounter = 0;
+
+  //user input
+  double givenPrice;
+
+  //menu
+  char menu;
+  int start = 1;
+  string stop = "";
+  string cancel = "no";
+  double change;
+  double basePrice;
+
+  //introduction
+  cout << "Welcome to the vending machine change maker program." << endl;
+
+  //printing stock
+  printStock(nickel, dimes, quarters, ones, fives);
+
+  //set givenPrice to return of function getPurchase to get the item's price
+  givenPrice = getPurchase();
+  basePrice = givenPrice;
+
+  //printing menu
+  printMenu();
+  do
+  {
+    //check payment dues for dollars and cents
+    if(givenPrice*100 > 100 && cancel == "no")
+    {
+      cout << "Payment due: ";
+      int dollarCheck = givenPrice;
+      double centCheck = givenPrice - dollarCheck;
+      cout << dollarCheck << " dollar and ";
+      cout << centCheck*100 << " cent" << endl;
+    }
+    else if (givenPrice*100 < 100 && givenPrice > 0 && cancel == "no")
+    {
+      cout << "Payment due: ";
+      cout << givenPrice*100 << " cent" << endl;
+    }
+    else if (givenPrice < 0 || cancel == "yes")
+    {
+      //get user change from what was put in
+      if(cancel == "yes")
+      {
+        givenPrice = givenPrice - basePrice;
+      }
+      //converts givePrice from double to large integers
+      givenPrice = givenPrice * -1 *100;
+
+      while(givenPrice > 0.01 || cancel == "yes")
+      {
+        //change calcualtion for 5s and 1s
+        /*
+        if(givenPrice >= 500 && fives > 0 && cancel == "no")
+        {
+          int checkCoins = fives * 500;
+          if(givenPrice < checkCoins)
+          {
+            int numCoins;
+            numCoins = givenPrice/500;
+            fives = fives - numCoins;
+            fCounter = numCoins;
+            givenPrice = givenPrice - (numCoins * 500);
+            if(givenPrice < 0.01)
+            {
+              givenPrice = 0;
+            }
+          }
+          else if (givenPrice > checkCoins)
+          {
+            givenPrice = givenPrice - checkCoins;
+            fCounter = fives;
+            fives = 0;
+          }
+        }
+        else if(givenPrice >= 100 && ones > 0 && cancel == "no")
+        {
+          int checkCoins = ones * 100;
+          if(givenPrice < checkCoins)
+          {
+            int numCoins;
+            numCoins = givenPrice/100;
+            ones = ones - numCoins;
+            oCounter = oCounter + numCoins;
+            givenPrice = givenPrice - (numCoins * 100);
+            if(givenPrice < 0.01)
+            {
+              givenPrice = 0;
+            }
+          }
+          else if (givenPrice > checkCoins)
+          {
+            int checkCoins = ones * 100;
+            givenPrice = givenPrice - checkCoins;
+            oCounter = ones;
+            ones = 0;
+          }
+        }
+        */
+        //change calculations for 25 cents
+        if(givenPrice >= 25 && quarters > 0)
+        {
+          int checkCoins = quarters * 25;
+          if(givenPrice < checkCoins)
+          {
+            int numCoins;
+            numCoins = givenPrice/25;
+            quarters = quarters - numCoins;
+            qCounter = qCounter + numCoins;
+            givenPrice = givenPrice - (numCoins * 25);
+            if(givenPrice < 0.01)
+            {
+              givenPrice = 0;
+            }
+          }
+          else if (givenPrice > checkCoins)
+          {
+            givenPrice = givenPrice - checkCoins;
+            qCounter = quarters;
+            quarters = 0;
+          }
+        }
+        //change calculations for 10 cents
+        else if(givenPrice >= 10 && dimes > 0)
+        {
+          int checkCoins = dimes * 10;
+          if(givenPrice < checkCoins)
+          {
+            int numCoins;
+            numCoins = givenPrice/10;
+            dimes = dimes - numCoins;
+            dCounter = dCounter + numCoins;
+            givenPrice = givenPrice - (numCoins * 10);
+            if(givenPrice < 0.01)
+            {
+              givenPrice = 0;
+            }
+          }
+          else if (givenPrice > checkCoins)
+          {
+            givenPrice = givenPrice - checkCoins;
+            dCounter = dimes;
+            dimes = 0;
+          }
+        }
+        ////change calculations for 5 cents
+        else if(givenPrice >= 5 && nickel > 0)
+        {
+          int checkCoins = nickel * 5;
+          if(givenPrice < checkCoins)
+          {
+            int numCoins;
+            numCoins = givenPrice/5;
+            nickel = nickel - numCoins;
+            nCounter = nCounter + numCoins;
+            givenPrice = givenPrice - (numCoins * 5);
+            if(givenPrice < 0.01)
+            {
+              givenPrice = 0;
+            }
+          }
+          else if (givenPrice > checkCoins)
+          {
+            givenPrice = givenPrice - checkCoins;
+            nCounter = nickel;
+            nickel = 0;
+          }
+        }
+        //breaks when empty
+        else if(nickel == 0 && dimes == 0 && quarters == 0)
+        {
+          break;
+        }
+        //break when cancel
+        else if(cancel == "yes")
+        {
+          break;
+        }
+        //if there is exceptions to change that is not handl;ed above
+        else
+        {
+          givenPrice = givenPrice/-100;
+          break;
+        }
+      }
+    }
+
+    //checks the change ion machine as well as print the result and ask to continue
+    if(givenPrice < 0.01)
+    {
+      printChange(nCounter,dCounter,qCounter,oCounter, fCounter);
+      
+      if(givenPrice < 0)
+      {
+        cout << "Machine is out of change." << endl;
+        cout << "See store manager for remaining refund." << endl;
+        cout << "Amount due is: ";
+        cout << givenPrice*-100 << " cent" << endl;
+      }
+
+      printStock(nickel, dimes, quarters, ones, fives);
+      nCounter = 0;
+      dCounter = 0;
+      qCounter = 0;
+      oCounter = 0;
+      fCounter = 0;
+
+
+      try {
+        cout << "Do you want to continue: ";
+        cin >> stop;
+      } catch(...) {
+        cout << "Illegal Input" << endl;
+      }
+      if(stop == "no")
+      {
+        return 0;
+      }
+      else
+      {
+        stop = "yes";
+        printMenu();
+        givenPrice = getPurchase();
+        basePrice = givenPrice;
+        cancel = "no";
+      }
+    }
+    else if(givenPrice*100 > 100 && nickel == 0 && dimes == 0 && quarters == 0)
+    {
+      printChange(nCounter,dCounter,qCounter,oCounter, fCounter);
+
+      givenPrice = givenPrice/100;
+      int dollarCheck = givenPrice;
+      double centCheck = givenPrice - dollarCheck;
+      cout << "Machine is out of change." << endl;
+      cout << "See store manager for remaining refund." << endl;
+      cout << "Amount due is: ";
+      cout << dollarCheck << " dollar and ";
+      cout << centCheck*100 << " cent" << endl;
+
+      printStock(nickel, dimes, quarters, ones, fives);
+      nCounter = 0;
+      dCounter = 0;
+      qCounter = 0;
+      oCounter = 0;
+      fCounter = 0;
+
+      try {
+        cout << "Do you want to continue: ";
+        cin >> stop;
+      } catch(...) {
+        cout << "Illegal Input" << endl;
+      }
+      if(stop == "no")
+      {
+        return 0;
+      }
+      else
+      {
+        stop = "yes";
+        printMenu();
+        givenPrice = getPurchase();
+        basePrice = givenPrice;
+        cancel = "no";
+      }
+    }
+    else if (givenPrice*100 < 100 && givenPrice > 0 && nickel == 0 && dimes == 0 && quarters == 0)
+    {
+      printChange(nCounter,dCounter,qCounter,oCounter, fCounter);
+
+      cout << "Machine is out of change." << endl;
+      cout << "See store manager for remaining refund." << endl;
+      cout << "Amount due is: ";
+      cout << givenPrice*100 << " cent" << endl;
+
+      printStock(nickel, dimes, quarters, ones, fives);
+      nCounter = 0;
+      dCounter = 0;
+      qCounter = 0;
+      oCounter = 0;
+      fCounter = 0;
+
+      try {
+        cout << "Do you want to continue: ";
+        cin >> stop;
+      } catch(...) {
+        cout << "Illegal Input" << endl;
+      }
+      if(stop == "no")
+      {
+        return 0;
+      }
+      else
+      {
+        stop = "yes";
+        printMenu();
+        givenPrice = getPurchase();
+        basePrice = givenPrice;
+        cancel = "no";
+      }
+    }
+
+    //ask for deposite and check for illegal selection
+    cout << "Indicate your deposit: ";
+    cin >> menu;
+    if(menu != 'n' && menu != 'd' && menu != 'q' && menu != 'o' && menu != 'f' && menu != 'c')
+    {
+      cout << "Illegal selection: " << menu << endl;
+    }
+    //the switch statement
+    switch (menu)
+    {
+      case 'n':
+      givenPrice = givenPrice - 0.05;
+      nickel++;
+        break;
+      case 'd':
+      givenPrice = givenPrice - 0.10;
+      dimes++;
+        break;
+      case 'q':
+      givenPrice = givenPrice - 0.25;
+      quarters++;
+        break;
+      case 'o':
+      givenPrice = givenPrice - 1;
+      ones++;
+        break;
+      case 'f':
+      givenPrice = givenPrice - 5;
+      fives++;
+        break;
+      case 'c':
+      cancel = "yes";
+      break;
+    }
+  }while(true);
+}
+
+void printStock(int n, int d, int q, int o, int f)
+{
+  cout << "Stock Contains: " << endl;
+  cout << setw(5) << n << " Nickel" << endl;
+  cout << setw(5) << d << " Dimes" << endl;
+  cout << setw(5) << q << " Quarters" << endl;
+  cout << setw(5) << o << " Ones" << endl;
+  cout << setw(5) << f << " Fives" << endl;
+}
+
+void printMenu()
+{
+  cout << "Menu for deposits: " << endl;
+  cout << setw(5) << " n - deposit a nickel" << endl;
+  cout << setw(5) << " d - deposit a dime" << endl;
+  cout << setw(5) << " q - deposit a quarter" << endl;
+  cout << setw(5) << " o - deposit a one dollar bill" << endl;
+  cout << setw(5) << " f - deposit a five dollar bill" << endl;
+}
+
+void printChange(int nC, int dC,int qC,int oC,int fC)
+{
+  cout << "Please take the change below." << endl;
+  if(nC > 0)
+  {
+    cout << setw(5) << nC << " Nickel" << endl;
+  }
+  if(dC > 0)
+  {
+    cout << setw(5) << dC << " Dimes" << endl;
+  }
+  if(qC > 0)
+  {
+    cout << setw(5) << qC << " Quarters" << endl;
+  }
+  if(oC > 0)
+  {
+    cout << setw(5) << oC << " Ones" << endl;;
+  }
+  if(fC > 0)
+  {
+    cout << setw(5) << fC << " Fives" << endl;
+  }
+  if(nC == 0 && dC== 0 && qC== 0 && oC == 0 && fC == 0)
+  {
+    cout << setw(5) << "No Change Due" << endl;
+  }
+}
+double getPurchase()
+{
+  while(true)
+  {
+    double givenPrice;
+    //get user purchase price
+    cout << "Enter the purchase price (xx.xx) :";
+    cin >> givenPrice;
+
+    //can not modulo doubles and floats so converting to integer
+    //multiply by 100 to get rid of the decimals
+    int checkRemainder = givenPrice * 100;
+    if(givenPrice > 0 &&  checkRemainder % 5 == 0)
+    {
+      return givenPrice;
+    }
+    else
+    {
+      cout << "Illegal price: Must be a non-negative multiple of 5 cents." << endl; 
+    }
+  }
+}
