@@ -1,0 +1,17 @@
+The name of the file is Rats.txt.
+The name of the special file is special_words.txt.
+
+The total number of words are 289.
+The total number of unique words are 185.
+The total number of unique words with 4 or more letters are 141.
+The total number of reaccuring special words
+indigestible 1
+erroneously 1
+computer 1
+vehicles 0
+naturally 0
+incisors 3
+teeth 3
+attractive 1
+year 0
+mice 0
